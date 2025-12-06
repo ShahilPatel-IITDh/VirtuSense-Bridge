@@ -81,7 +81,7 @@ Verify: The Blue LED should light up as the device connects to WiFi.
 Ensure Python 3.11+ is installed.
 Install dependencies:
 ```bash
-pip install paho-mqtt numpy
+pip install paho-mqtt
 ```
 #### Step 4: Run the Signal Generator
 Execute the generator script:
