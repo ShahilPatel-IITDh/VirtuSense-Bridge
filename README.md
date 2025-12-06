@@ -14,12 +14,12 @@ The system operates on a "Virtual Sensor" architecture, injecting synthetic volt
 
 ```mermaid
 graph LR
-    A[Python Digital Twin] -- Synthetic Telemetry --> B(MQTT Broker)
-    B -- Signal Injection --> C[ESP32 Edge Firmware]
-    C -- Threshold Logic --> D{State Detection}
-    D -- Normal --> E[Green LED (Safe)]
-    D -- Anomaly --> F[Red LED (Danger)]
-    D -- Idle --> G[Blue LED (Standby)]
+    A["Python Digital Twin"] -- Synthetic Telemetry --> B("MQTT Broker")
+    B -- Signal Injection --> C["ESP32 Edge Firmware"]
+    C -- Threshold Logic --> D{"State Detection"}
+    D -- Normal --> E["Green LED (Safe)"]
+    D -- Anomaly --> F["Red LED (Danger)"]
+    D -- Idle --> G["Blue LED (Standby)"]
 ```
 
 ## Key Features
