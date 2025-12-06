@@ -1,56 +1,59 @@
-/*
- * Project: VirtuSense Bridge
- * Module: Edge Receiver Firmware
- * Description: Subscribes to Python 'Digital Twin' data stream 
- *              and processes it as a virtual sensor input.
- */
-
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-// --- NETWORK CONFIGURATION ---
-// For Wokwi Simulation, use these exact credentials:
+// --- PIN DEFINITIONS ---
+#define LED_RED   13 // Fault
+#define LED_GREEN 12 // Normal
+#define LED_BLUE  14 // Idle
+
+// WiFi configuration for Wokwi simulation
 const char* ssid = "Wokwi-GUEST";
 const char* password = "";
 
-// For Real Hardware, un-comment and set your credentials:
-// const char* ssid = "YOUR_WIFI_SSID";
-// const char* password = "YOUR_WIFI_PASS";
-
-// --- MQTT CONFIGURATION ---
+// MQTT Configuration
 const char* mqtt_server = "broker.hivemq.com";
-// CRITICAL: Must match the topic in the Python script
-const char* topic_sub = "virtusense/unique_id_123/signal_input"; 
+const char* topic_sub = "virtusense/unique_id_123/signal_input";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-// Global variable to hold the latest "Sensor" reading
 int virtual_sensor_value = 0;
 
 void setup() {
   Serial.begin(115200);
+
+  // 1. SETUP LED PINS
+  pinMode(LED_RED, OUTPUT);
+  pinMode(LED_GREEN, OUTPUT);
+  pinMode(LED_BLUE, OUTPUT);
   
+  // LED Test Sequence
+  digitalWrite(LED_RED, HIGH); 
+  delay(100); 
+  digitalWrite(LED_RED, LOW);
+
+  digitalWrite(LED_GREEN, HIGH); 
+  delay(100); 
+  digitalWrite(LED_GREEN, LOW);
+
+  digitalWrite(LED_BLUE, HIGH);
+  delay(100); 
+  digitalWrite(LED_BLUE, LOW);
+
   setup_wifi();
-  
   client.setServer(mqtt_server, 1883);
   client.setCallback(mqttCallback);
 }
 
 void loop() {
-  // Ensure we stay connected to MQTT
   if (!client.connected()) {
     reconnect();
   }
-  client.loop();
+  client.loop(); // Checks for new MQTT messages
 
-  // --- APPLICATION LOGIC ---
-  // Here we use the data just like we would use analogRead(pin)
-  
+  // Application Logic
   process_sensor_data(virtual_sensor_value);
-
-  // Small delay to make Serial Monitor readable
-  delay(100); 
+  delay(500); 
 }
 
 // ---------------------------------------------------------
@@ -61,29 +64,42 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   for (int i = 0; i < length; i++) {
     message += (char)payload[i];
   }
-  
-  // Convert the incoming String (e.g., "2048") to an Integer
   virtual_sensor_value = message.toInt();
 }
 
 // ---------------------------------------------------------
-// DATA PROCESSING
+// DATA PROCESSING (Fixed Logic)
 // ---------------------------------------------------------
-void process_sensor_data(int val) {
-  // Convert 12-bit ADC value (0-4095) to Voltage (0-3.3V) for display
-  float voltage = val * (3.3 / 4095.0);
+void process_sensor_data(int dataValue) {
+  
+  // Debug print to see what is happening in Serial Monitor
+  Serial.print("Value: ");
+  Serial.print(dataValue);
 
-  Serial.print("RX <- Virtual ADC: ");
-  Serial.print(val);
-  Serial.print("\t [");
+  // If the value is extremely high (>3500) or extremely low (<300), it's a fault.
+  if (dataValue > 3500 || dataValue < 300) {
+      digitalWrite(LED_RED, HIGH);
+      digitalWrite(LED_GREEN, LOW);
+      digitalWrite(LED_BLUE, LOW);
+      Serial.println(" | STATUS: [!!! DANGER !!!]");
+  }
   
-  // Simple Visualizer in Serial Monitor
-  int bars = map(val, 0, 4095, 0, 20);
-  for(int i=0; i<bars; i++) Serial.print("=");
+  // If not a fault, check if it's IDLE (Low stable value)
+  // Python Idle is usually around 500
+  else if (dataValue < 900) {
+      digitalWrite(LED_BLUE, HIGH);
+      digitalWrite(LED_GREEN, LOW);
+      digitalWrite(LED_RED, LOW);
+      Serial.println(" | STATUS: IDLE");
+  }
   
-  Serial.print("] ");
-  Serial.print(voltage);
-  Serial.println(" V");
+  // If neither, it must be NORMAL Operation (Sine Wave)
+  else {
+      digitalWrite(LED_GREEN, HIGH);
+      digitalWrite(LED_RED, LOW);
+      digitalWrite(LED_BLUE, LOW);
+      Serial.println(" | STATUS: NORMAL");
+  }
 }
 
 // ---------------------------------------------------------
@@ -94,34 +110,24 @@ void setup_wifi() {
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
-
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
-
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
   Serial.println("\nWiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
 }
 
 void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
-    // Create a random Client ID
     String clientId = "ESP32Client-";
     clientId += String(random(0xffff), HEX);
-    
     if (client.connect(clientId.c_str())) {
       Serial.println("connected");
-      // Resubscribe to the data topic
       client.subscribe(topic_sub);
     } else {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
       delay(5000);
     }
   }

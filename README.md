@@ -8,7 +8,7 @@
 
 ---
 
-## 🏗 System Architecture
+## System Architecture
 
 The system operates on a "Virtual Sensor" architecture, injecting synthetic voltage data into an embedded microcontroller to verify firmware logic before deployment.
 
@@ -58,7 +58,7 @@ graph LR
     A --> D[assets]
     B --> E[esp32_receiver]
     E --> F[esp32_receiver.ino]
-    C --> G[generator.py]
+    C --> G[signalGenerator.py]
     D --> H[demo_screenshot.png]
 ```
 
