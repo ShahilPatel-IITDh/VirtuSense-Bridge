@@ -1,3 +1,4 @@
+@ -1,102 +0,0 @@
 # VirtuSense Bridge: Industrial IoT Digital Twin & HIL Simulation
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
