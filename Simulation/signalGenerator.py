@@ -10,7 +10,7 @@ import random
 import math
 
 # --- CONFIGURATION ---
-MQTT_BROKER = "broker.hivemq.com" 
+MQTT_BROKER = "test.mosquitto.org" 
 MQTT_PORT = 1883
 TOPIC_SIGNAL = "virtusense/unique_id_123/signal_input"
 
