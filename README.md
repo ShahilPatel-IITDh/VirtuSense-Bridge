@@ -42,12 +42,12 @@ The system classifies machine health based on dynamic thresholds:
 | Fault | > 3500 or < 300 | 🔴 Red LED | Critical Failure / Spike |
 
 ## Tech Stack
-Language: Python 3.11, C++ (Arduino Framework)
-Communication: MQTT Protocol (HiveMQ Public Broker)
-Simulation Environment: Wokwi (ESP32 Virtualization) / Physical ESP32
-Libraries:
-Python: paho-mqtt
-Arduino: PubSubClient, WiFi
+Language: Python 3.11, C++ (Arduino Framework)<br>
+Communication: MQTT Protocol (HiveMQ Public Broker)<br>
+Simulation Environment: Wokwi (ESP32 Virtualization) / Physical ESP32<br>
+Libraries:<br>
+Python: paho-mqtt<br>
+Arduino: PubSubClient, WiFi<br>
 
 ## Project Structure
 ```mermaid
@@ -65,20 +65,20 @@ graph LR
 ## How to Run the Simulation
 
 #### Step 1: Hardware Setup
-If using a physical ESP32 or Wokwi Simulator, connect LEDs to the following GPIO pins:
-*Red LED (Fault): GPIO 13*
-*Green LED (Normal): GPIO 12*
-*Blue LED (Idle): GPIO 14*
+If using a physical ESP32 or Wokwi Simulator, connect LEDs to the following GPIO pins:<br>
+*Red LED (Fault): GPIO 13*<br>
+*Green LED (Normal): GPIO 12*<br>
+*Blue LED (Idle): GPIO 14*<br>
 
 #### Step 2: Firmware Deployment
-Open firmware/esp32_receiver.ino in Arduino IDE or Wokwi.
-Configure WiFi credentials and MQTT broker settings in the code.
-Install the PubSubClient library.
-Upload to ESP32.
-Verify: The Blue LED should light up as the device connects to WiFi.
+Open firmware/esp32_receiver.ino in Arduino IDE or Wokwi.<br>
+Configure WiFi credentials and MQTT broker settings in the code.<br>
+Install the PubSubClient library.<br>
+Upload to ESP32.<br>
+Verify: The Blue LED should light up as the device connects to WiFi.<br>
 
 #### Step 3: Python Environment
-Ensure Python 3.11+ is installed.
+Ensure Python 3.11+ is installed.<br>
 Install dependencies:
 ```bash
 pip install paho-mqtt
@@ -89,12 +89,14 @@ Execute the generator script:
 python simulation/generator.py
 ```
 Monitor the ESP32 LEDs to observe state changes based on the synthetic telemetry.
-Use the interactive terminal to control the machine state:
-Type n and press Enter: Sends Normal Sine Wave (Green LED).
-Type a and press Enter: Sends Anomaly Spikes (Red LED flashes).
-Type i and press Enter: Sends Idle Noise (Blue LED).
+Use the interactive terminal to control the machine state:<br>
+Type n and press Enter: Sends Normal Sine Wave (Green LED).<br>
+Type a and press Enter: Sends Anomaly Spikes (Red LED flashes).<br>
+Type i and press Enter: Sends Idle Noise (Blue LED).<br>
 
 ## Author
-Developed by [Shahil Patel]
-(Embedded Systems & AI Engineer, Bharat Electronics Limited | IIT Dharwad Alumnus
-Focus: Industrial IoT, Edge AI, and System Architecture)
+Developed by <br>
+**Shahil Patel**<br>
+Embedded Systems & AI Engineer, Bharat Electronics Limited<br>
+IIT Dharwad Alumnus <br>
+*Focus: Industrial IoT, Edge AI, and System Architecture*
