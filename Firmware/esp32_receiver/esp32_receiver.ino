@@ -8,7 +8,7 @@
 
 const char* ssid = "Wokwi-GUEST";
 const char* password = "";
-const char* mqtt_server = "roker.emqx.io";
+const char* mqtt_server = "test.mosquitto.org";
 
 // TOPIC 1: INPUT (From Python)
 const char* topic_input = "virtusense/unique_id_123/signal_input"; 
