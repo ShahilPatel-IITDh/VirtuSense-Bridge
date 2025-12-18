@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#121212"
-    android:padding="24dp"
+    android:padding="20dp"
     tools:context=".MainActivity">
 
     <!-- Header -->
@@ -15,30 +15,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
-        android:text="VIRTUSENSE REMOTE"
-        android:letterSpacing="0.1"
+        android:layout_marginTop="16dp"
+        android:text="VIRTUSENSE BRIDGE"
+        android:letterSpacing="0.15"
         android:textColor="#FFFFFF"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/subHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/headerTitle"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="4dp"
-        android:text="Live Edge Telemetry"
-        android:textColor="#888888"
+        android:text="Live Digital Twin Monitor"
+        android:textColor="#AAAAAA"
         android:textSize="12sp" />
 
     <!-- Main Status Card -->
     <androidx.cardview.widget.CardView
         android:id="@+id/statusCard"
         android:layout_width="match_parent"
-        android:layout_height="320dp"
-        android:layout_centerInParent="true"
-        android:backgroundTint="#333333"
+        android:layout_height="280dp"
+        android:layout_below="@id/subHeader"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="#2D2D2D"
         app:cardCornerRadius="24dp"
         app:cardElevation="12dp">
 
@@ -50,11 +52,12 @@
             android:padding="20dp">
 
             <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:id="@+id/iconStatus"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:src="@android:drawable/ic_popup_sync"
                 app:tint="#FFFFFF"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="24dp"/>
 
             <TextView
                 android:id="@+id/lblStatus"
@@ -63,27 +66,59 @@
                 android:gravity="center"
                 android:text="CONNECTING"
                 android:textColor="#FFFFFF"
-                android:textSize="34sp"
-                android:textStyle="bold" />
-
-            <View
-                android:layout_width="60dp"
-                android:layout_height="2dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="#55FFFFFF" />
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:shadowColor="#80000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="4"/>
 
             <TextView
                 android:id="@+id/lblValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Establishing Link..."
-                android:textColor="#DDDDDD"
-                android:textSize="18sp"
+                android:layout_marginTop="12dp"
+                android:text="Waiting for ESP32..."
+                android:textColor="#E0E0E0"
+                android:textSize="20sp"
                 android:fontFamily="monospace"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <!-- History Log Title -->
+    <TextView
+        android:id="@+id/lblHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/statusCard"
+        android:layout_marginTop="24dp"
+        android:text="EVENT LOG"
+        android:textColor="#666666"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:letterSpacing="0.1"/>
+
+    <!-- Scrollable History Log -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/lblHistory"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/bg_log_panel"
+        android:padding="10dp">
+        
+        <TextView
+            android:id="@+id/txtLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-- System Initialized --"
+            android:textColor="#00FF00"
+            android:fontFamily="monospace"
+            android:textSize="12sp"
+            android:lineSpacingExtra="4dp"/>
+    </ScrollView>
 
     <!-- Footer -->
     <TextView
@@ -91,8 +126,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:text="Connected via HiveMQ Public Broker"
+        android:text="Broker: test.mosquitto.org:1883"
         android:textColor="#444444"
         android:textSize="10sp" />
 
